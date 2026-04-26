@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Add Car - CarTrader</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,#3a5ff7 0%,#8040c0 100%);color:#333;min-height:100vh}
+    .top-nav{background:#fff;padding:16px 40px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 10px rgba(0,0,0,0.1);position:relative;z-index:10}
+    .top-nav .logo{font-size:24px;font-weight:700;background:linear-gradient(135deg,#3a5ff7,#8040c0);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+    .nav-links{display:flex;gap:32px}
+    .nav-links a{color:#555;text-decoration:none;font-size:14px;font-weight:500}
+    .container{max-width:700px;margin:60px auto;padding:0 20px;position:relative;z-index:1}
+    .page-header{display:flex;align-items:center;gap:12px;margin-bottom:30px}
+    .page-header h1{font-size:28px;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,0.15)}
+    
+    .help-bubble{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,0.8);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+    .help-bubble:hover{animation:bounce 0.6s ease infinite}
+    @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+    .question-mark{font-size:16px;font-weight:700;background:linear-gradient(135deg,#3a5ff7,#8040c0);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+    
+    .help-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:100;align-items:center;justify-content:center}
+    .modal-content{background:#fff;border-radius:24px;padding:30px;max-width:500px;width:90%;box-shadow:0 15px 50px rgba(0,0,0,0.2)}
+    .modal-content h3{margin-bottom:16px;background:linear-gradient(135deg,#3a5ff7,#8040c0);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+    .instruction-item{margin-bottom:12px;font-size:14px;color:#444}
+    .modal-close{margin-top:20px;padding:10px 20px;background:linear-gradient(135deg,#3a5ff7,#8040c0);color:#fff;border:none;border-radius:12px;cursor:pointer}
+    
+    .form-card{background:#fff;border-radius:24px;padding:40px;box-shadow:0 15px 40px rgba(0,0,0,0.15)}
+    .form-group{margin-bottom:24px}
+    .form-group label{display:block;font-weight:600;font-size:14px;margin-bottom:8px}
+    .form-group input:not([type="file"]){width:100%;padding:16px;border:1px solid #e8e8e8;border-radius:12px;font-size:15px;background:#fafafa}
+    .form-group input:not([type="file"]):focus{outline:none;border-color:#667eea;background:#fff}
+    
+    .form-group.error input:not([type="file"]){border-color:#ef4444;background:#fef2f2}
+    .error-text{display:none;margin-top:6px;font-size:12px;color:#ef4444}
+    .form-group.error .error-text{display:block}
+    @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+    .form-group.shake input{animation:shake 0.4s ease}
+    
+    .file-upload-wrapper{width:100%;min-height:120px;border:2px dashed #d1d5db;border-radius:16px;padding:30px 20px;background:#f9fafb;position:relative;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center}
+    .file-upload-wrapper input{position:absolute;inset:0;opacity:0}
+    .file-upload-text{color:#4b5563;font-size:16px}
+    .file-upload-hint{font-size:13px;color:#9ca3af;margin-top:8px}
+    #preview{max-width:220px;border-radius:12px;margin-top:12px;display:none}
+    
+    .btn{width:100%;padding:16px;background:linear-gradient(135deg,#3a5ff7,#8040c0);color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:600;cursor:pointer;margin-top:10px}
+    
+    .submit-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9999;align-items:center;justify-content:center}
+    .submit-modal-content{background:#fff;border-radius:20px;padding:40px;max-width:450px;width:90%;text-align:center}
+    .submit-modal-icon{font-size:50px;margin-bottom:20px}
+    .submit-modal-title{font-size:20px;font-weight:700;margin-bottom:12px}
+    .submit-modal-desc{font-size:15px;color:#555;margin-bottom:25px}
+    .submit-modal-btn{padding:12px 30px;border-radius:12px;border:none;font-size:15px;font-weight:600;cursor:pointer}
+    .btn-error{background:#ef4444;color:#fff}
+    .btn-success{background:linear-gradient(135deg,#10b981,#059669);color:#fff}
+  </style>
+</head>
+<body>
+
+<div class="top-nav">
+  <div class="logo">CarTrader</div>
+  <div class="nav-links">
+    <a>Home</a><a>Seller</a><a>Add Car</a><a>Search</a>
+  </div>
+</div>
+
+<div class="container">
+  <div class="page-header">
+    <h1>Add New Car</h1>
+    <div class="help-bubble"><span class="question-mark">?</span></div>
+  </div>
+
+  <div class="help-modal">
+    <div class="modal-content">
+      <h3>How to Fill</h3>
+      <div class="instruction-item"><strong>Colour:</strong> Black, White</div>
+      <div class="instruction-item"><strong>Model:</strong> BMW 3 Series</div>
+      <div class="instruction-item"><strong>Year:</strong> 4-digit</div>
+      <div class="instruction-item"><strong>Location:</strong> Province/City</div>
+      <div class="instruction-item"><strong>Price:</strong> Number only</div>
+      <div class="instruction-item"><strong>Image:</strong> JPG/PNG</div>
+      <button class="modal-close">Close</button>
+    </div>
+  </div>
+
+  <div class="form-card">
+    <form id="addCarForm">
+      <div class="form-group" data-group="colour">
+        <label>Colour</label>
+        <input type="text">
+        <div class="error-text">Please enter valid color</div>
+      </div>
+      <div class="form-group" data-group="model">
+        <label>Model</label>
+        <input type="text">
+        <div class="error-text">Please enter valid model</div>
+      </div>
+      <div class="form-group" data-group="year">
+        <label>Year</label>
+        <input type="number">
+        <div class="error-text">4-digit year (1900-2029)</div>
+      </div>
+      <div class="form-group" data-group="location">
+        <label>Location</label>
+        <input type="text">
+        <div class="error-text">Enter precise location</div>
+      </div>
+      <div class="form-group" data-group="price">
+        <label>Price (CNY)</label>
+        <input type="number">
+        <div class="error-text">Enter valid price (>0)</div>
+      </div>
+      <div class="form-group" data-group="img">
+        <label>Car Image</label>
+        <div class="file-upload-wrapper">
+          <span class="file-upload-text">Choose File or drag here</span>
+          <span class="file-upload-hint">No file chosen</span>
+          <input type="file" accept="image/*">
+        </div>
+        <div class="error-text">Please upload image</div>
+        <img id="preview">
+      </div>
+      <button type="submit" class="btn">Submit Car</button>
+    </form>
+  </div>
+</div>
+
+<div class="submit-modal">
+  <div class="submit-modal-content">
+    <div class="submit-modal-icon"></div>
+    <h3 class="submit-modal-title"></h3>
+    <p class="submit-modal-desc"></p>
+    <button class="submit-modal-btn">OK</button>
+  </div>
+</div>
+
+<script>
+  const form = document.getElementById('addCarForm');
+  const fileInput = document.querySelector('input[type="file"]');
+  const preview = document.getElementById('preview');
+  const uploadText = document.querySelector('.file-upload-text');
+  const uploadHint = document.querySelector('.file-upload-hint');
+  const modal = document.querySelector('.submit-modal');
+  const modalIcon = document.querySelector('.submit-modal-icon');
+  const modalTitle = document.querySelector('.submit-modal-title');
+  const modalDesc = document.querySelector('.submit-modal-desc');
+  const modalBtn = document.querySelector('.submit-modal-btn');
+  const helpModal = document.querySelector('.help-modal');
+  const helpBtn = document.querySelector('.help-bubble');
+  const closeHelp = document.querySelector('.modal-close');
+
+  helpBtn.onclick = () => helpModal.style.display = 'flex';
+  closeHelp.onclick = () => helpModal.style.display = 'none';
+  helpModal.onclick = e => e.target === helpModal && (helpModal.style.display = 'none');
+
+  fileInput.onchange = () => {
+    const f = fileInput.files[0];
+    if(f){preview.src=URL.createObjectURL(f);preview.style.display='block';uploadText.textContent='Selected: '+f.name;uploadHint.textContent='Ready'}
+    else{preview.style.display='none';uploadText.textContent='Choose File or drag here';uploadHint.textContent='No file chosen'}
+  };
+
+  const rules = {
+    colour:v=>v.length>1&&/^[A-Za-z\s]+$/.test(v),
+    model:v=>v.length>2,
+    year:v=>v.length===4&&+v>1900&&+v<2030,
+    location:v=>v.length>3,
+    price:v=>+v>0
+  };
+
+  function validateOne(group){
+    const input = group.querySelector('input:not([type="file"])');
+    if(!input) return true;
+    const name = group.dataset.group;
+    const ok = rules[name](input.value.trim());
+    if(!ok){group.classList.add('error');setTimeout(()=>group.classList.add('shake'),10);setTimeout(()=>group.classList.remove('shake'),400)}
+    else group.classList.remove('error','shake');
+    return ok;
+  }
+
+  form.querySelectorAll('input:not([type="file"])').forEach(i=>{
+    i.onblur=()=>validateOne(i.closest('.form-group'));
+    i.oninput=()=>i.closest('.form-group').classList.remove('error','shake');
+  });
+
+  function showModal(isErr){
+    if(isErr){
+      modalIcon.textContent='❌';modalIcon.style.color='#ef4444';
+      modalTitle.textContent='Error';
+      modalDesc.textContent='Incorrect information, please fill again.';
+      modalBtn.className='submit-modal-btn btn-error';
+    }else{
+      modalIcon.textContent='✅';modalIcon.style.color='#10b981';
+      modalTitle.textContent='Success';
+      modalDesc.textContent='Your information has been submitted successfully.';
+      modalBtn.className='submit-modal-btn btn-success';
+    }
+    modal.style.display='flex';
+  }
+
+  modalBtn.onclick=()=>modal.style.display='none';
+
+  form.onsubmit=e=>{
+    e.preventDefault();
+    let err=false;
+    document.querySelectorAll('.form-group').forEach(g=>{if(!validateOne(g))err=true});
+    if(fileInput.files.length===0){const g=document.querySelector('[data-group="img"]');g.classList.add('error');setTimeout(()=>g.classList.add('shake'),10);setTimeout(()=>g.classList.remove('shake'),400);err=true}
+    if(err)showModal(true);
+    else{showModal(false);setTimeout(()=>{form.reset();preview.style.display='none';uploadText.textContent='Choose File or drag here';uploadHint.textContent='No file chosen';document.querySelectorAll('.form-group').forEach(g=>g.classList.remove('error','shake'))},1500)}
+  };
+</script>
+</body>
+</html>
