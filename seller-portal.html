@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Seller Portal — CarTrader</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f8f9fa;
+      color: #333;
+      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .top-nav {
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(10px);
+      padding: 16px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+    }
+
+    .top-nav .logo {
+      font-size: 24px;
+      font-weight: 700;
+      text-decoration: none;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .top-nav .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .top-nav .nav-links a {
+      color: #555;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .top-nav .nav-links a:hover {
+      color: #667eea;
+    }
+
+    main {
+      flex: 1;
+      padding: 40px 20px;
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .page-header h1 {
+      font-size: 32px;
+      color: #1a1a2e;
+    }
+
+    .page-header .btn-group {
+      display: flex;
+      gap: 12px;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: transform 0.2s;
+    }
+
+    .btn-outline {
+      background: white;
+      color: #667eea;
+      border: 2px solid #667eea;
+    }
+
+    .btn-outline-logout {
+      background: white;
+      color: #e74c3c;
+      border: 2px solid #e74c3c;
+    }
+
+    .btn-outline-logout:hover {
+      background: #e74c3c;
+      color: white;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .info-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+
+    .info-card {
+      background: white;
+      border: 1px solid #e8e8e8;
+      border-radius: 16px;
+      padding: 24px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      transition: transform 0.2s;
+    }
+
+    .info-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .info-card .number {
+      font-size: 32px;
+      font-weight: bold;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 8px;
+    }
+
+    .info-card .label {
+      font-size: 14px;
+      color: #888;
+    }
+
+    .action-buttons {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .action-card {
+      background: white;
+      border: 1px solid #e8e8e8;
+      border-radius: 16px;
+      padding: 30px 20px;
+      text-align: center;
+      text-decoration: none;
+      transition: all 0.3s;
+      display: block;
+    }
+
+    .action-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
+      border-color: #667eea;
+    }
+
+    .action-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+
+    .action-card h3 {
+      font-size: 18px;
+      color: #333;
+      margin-bottom: 8px;
+    }
+
+    .action-card p {
+      font-size: 13px;
+      color: #888;
+    }
+
+    .my-cars-section {
+      margin-top: 50px;
+      background: white;
+      border-radius: 24px;
+      padding: 30px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+
+    .my-cars-section h2 {
+      font-size: 24px;
+      margin-bottom: 20px;
+      color: #1a1a2e;
+    }
+
+    .my-cars-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .my-car-card {
+      background: #f9f9f9;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid #eee;
+      transition: transform 0.2s;
+    }
+
+    .my-car-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+    }
+
+    .my-car-img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      background: #ddd;
+    }
+
+    .my-car-info {
+      padding: 16px;
+    }
+
+    .my-car-model {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .my-car-text {
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 4px;
+    }
+
+    .empty-cars {
+      text-align: center;
+      padding: 40px;
+      color: #999;
+      font-size: 15px;
+    }
+
+    .welcome-banner {
+      background: linear-gradient(135deg, #667eea10, #764ba210);
+      padding: 20px 30px;
+      border-radius: 20px;
+      margin-bottom: 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .welcome-text h2 {
+      font-size: 22px;
+      color: #667eea;
+    }
+
+    .welcome-text p {
+      color: #666;
+      font-size: 14px;
+      margin-top: 5px;
+    }
+
+    footer {
+      background: #1a1a2e;
+      color: rgba(255,255,255,0.7);
+      text-align: center;
+      padding: 20px;
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="top-nav">
+    <a href="homepage.html" class="logo">CarTrader</a>
+    <div class="nav-links">
+      <a href="homepage.html">Home</a>
+      <a href="seller-portal.html">Seller Portal</a>
+      <a href="searchpage.html">Search</a>
+    </div>
+  </nav>
+
+  <main>
+    <div class="page-header">
+      <h1>Seller Portal</h1>
+      <div class="btn-group" id="authButtons">
+        <!-- 动态插入按钮 -->
+      </div>
+    </div>
+
+    <div id="welcomeBanner" class="welcome-banner" style="display: none;">
+      <div class="welcome-text">
+        <h2>👋 Welcome back, <span id="displayUsername"></span>!</h2>
+        <p>Manage your car listings and track performance</p>
+      </div>
+      <button onclick="logout()" class="btn btn-outline-logout">🚪 Logout</button>
+    </div>
+
+    <div class="info-cards">
+      <div class="info-card">
+        <div class="number" id="myCarCount">0</div>
+        <div class="label">My Listings</div>
+      </div>
+      <div class="info-card">
+        <div class="number" id="totalSiteCount">0</div>
+        <div class="label">Total Cars on Site</div>
+      </div>
+    </div>
+
+    <div class="action-buttons">
+      <a href="add-car.html" class="action-card">
+        <div class="action-icon">➕</div>
+        <h3>Add New Car</h3>
+        <p>List a new vehicle</p>
+      </a>
+      <a href="searchpage.html" class="action-card">
+        <div class="action-icon">🔍</div>
+        <h3>Browse All Cars</h3>
+        <p>View marketplace</p>
+      </a>
+      <a href="register.html" class="action-card" id="registerAction">
+        <div class="action-icon">📝</div>
+        <h3>Register</h3>
+        <p>Create a seller account</p>
+      </a>
+      <a href="login.html" class="action-card" id="loginAction">
+        <div class="action-icon">🔐</div>
+        <h3>Login</h3>
+        <p>Access your dashboard</p>
+      </a>
+    </div>
+
+    <!-- 我的车辆列表区域 -->
+    <div class="my-cars-section" id="myCarsSection" style="display: none;">
+      <h2>🚗 My Listed Cars</h2>
+      <div id="myCarsList" class="my-cars-grid"></div>
+    </div>
+  </main>
+
+  <footer>
+    &copy; 2026 CarTrader — Your trusted car marketplace
+  </footer>
+
+  <script>
+    function getCurrentUser() {
+      return localStorage.getItem("loggedInUser");
+    }
+
+    function getAllCars() {
+      return JSON.parse(localStorage.getItem("cars") || "[]");
+    }
+
+    function getMyCars() {
+      const currentUser = getCurrentUser();
+      if (!currentUser) return [];
+      const allCars = getAllCars();
+      return allCars.filter(car => car.addedBy === currentUser);
+    }
+
+    function updateStats() {
+      const myCars = getMyCars();
+      const allCars = getAllCars();
+      
+      document.getElementById("myCarCount").innerText = myCars.length;
+      document.getElementById("totalSiteCount").innerText = allCars.length;
+    }
+
+    function renderMyCars() {
+      const currentUser = getCurrentUser();
+      const myCarsSection = document.getElementById("myCarsSection");
+      const myCarsList = document.getElementById("myCarsList");
+      
+      if (!currentUser) {
+        myCarsSection.style.display = "none";
+        return;
+      }
+      
+      const myCars = getMyCars();
+      
+      if (myCars.length === 0) {
+        myCarsSection.style.display = "block";
+        myCarsList.innerHTML = `<div class="empty-cars">📭 You haven't listed any cars yet. Click "Add New Car" to get started!</div>`;
+        return;
+      }
+      
+      myCarsSection.style.display = "block";
+      myCarsList.innerHTML = myCars.map(car => `
+        <div class="my-car-card">
+          <img src="${car.img}" class="my-car-img" alt="${car.model}" onerror="this.src='https://via.placeholder.com/400x200/999/fff?text=Car+Image'">
+          <div class="my-car-info">
+            <div class="my-car-model">${car.model} (${car.year})</div>
+            <div class="my-car-text">🎨 ${car.colour}</div>
+            <div class="my-car-text">📍 ${car.location}</div>
+            <div class="my-car-text">💰 ¥${parseInt(car.price).toLocaleString()}</div>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function updateUIForLoginState() {
+      const currentUser = getCurrentUser();
+      const authButtons = document.getElementById("authButtons");
+      const welcomeBanner = document.getElementById("welcomeBanner");
+      const registerAction = document.getElementById("registerAction");
+      const loginAction = document.getElementById("loginAction");
+      
+      if (currentUser) {
+        // 已登录状态
+        authButtons.innerHTML = ``;
+        welcomeBanner.style.display = "flex";
+        document.getElementById("displayUsername").innerText = currentUser;
+        
+        if (registerAction) registerAction.style.display = "none";
+        if (loginAction) loginAction.style.display = "none";
+        
+        updateStats();
+        renderMyCars();
+      } else {
+        // 未登录状态
+        authButtons.innerHTML = `
+          <a href="register.html" class="btn">Register</a>
+          <a href="login.html" class="btn btn-outline">Login</a>
+        `;
+        welcomeBanner.style.display = "none";
+        
+        if (registerAction) registerAction.style.display = "block";
+        if (loginAction) loginAction.style.display = "block";
+        
+        document.getElementById("myCarCount").innerText = "0";
+        document.getElementById("totalSiteCount").innerText = getAllCars().length;
+        
+        const myCarsSection = document.getElementById("myCarsSection");
+        myCarsSection.style.display = "none";
+      }
+    }
+
+    function logout() {
+      localStorage.removeItem("loggedInUser");
+      alert("Logged out successfully!");
+      updateUIForLoginState();
+    }
+
+    window.onload = () => {
+      updateUIForLoginState();
+    };
+  </script>
+</body>
+</html>
