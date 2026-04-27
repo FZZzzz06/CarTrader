@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Seller Login - CarTrader</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: #f0fdf4;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Nav - 极简白底 */
+    .top-nav {
+      background: #ffffff;
+      padding: 16px 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #d1fae5;
+    }
+    .top-nav .logo {
+      font-size: 22px;
+      font-weight: 700;
+      text-decoration: none;
+      color: #059669;
+      letter-spacing: -0.3px;
+    }
+    .top-nav .nav-links {
+      display: flex;
+      gap: 36px;
+    }
+    .top-nav .nav-links a {
+      color: #6b7280;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .top-nav .nav-links a:hover {
+      color: #059669;
+    }
+
+    /* Main */
+    main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+    .box {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 44px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 4px 24px rgba(5,150,105,0.08), 0 1px 3px rgba(0,0,0,0.04);
+      border: 1px solid #d1fae5;
+    }
+    .box .icon {
+      width: 48px;
+      height: 48px;
+      background: #d1fae5;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      font-size: 22px;
+    }
+    .box h1 {
+      font-size: 26px;
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 6px;
+      letter-spacing: -0.5px;
+    }
+    .box .sub {
+      font-size: 14px;
+      color: #6b7280;
+      margin-bottom: 32px;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      font-size: 13px;
+      color: #374151;
+    }
+    input {
+      width: 100%;
+      padding: 13px 16px;
+      border: 1.5px solid #e5e7eb;
+      border-radius: 10px;
+      font-size: 15px;
+      font-family: 'Outfit', sans-serif;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      background: #fafafa;
+    }
+    input:focus {
+      outline: none;
+      border-color: #059669;
+      box-shadow: 0 0 0 3px rgba(5,150,105,0.1);
+      background: #fff;
+    }
+    input.error {
+      border-color: #ef4444;
+    }
+    .err-msg {
+      font-size: 12px;
+      color: #ef4444;
+      margin-top: 6px;
+      display: none;
+    }
+    .err-msg.show {
+      display: block;
+    }
+    .btn {
+      width: 100%;
+      padding: 14px;
+      background: #059669;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: 'Outfit', sans-serif;
+      transition: all 0.2s;
+      margin-top: 4px;
+    }
+    .btn:hover {
+      background: #047857;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(5,150,105,0.25);
+    }
+    .btn:active {
+      transform: translateY(0);
+    }
+    .tip {
+      text-align: center;
+      font-size: 13px;
+      margin-top: 24px;
+      color: #6b7280;
+    }
+    .tip a {
+      color: #059669;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .tip a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <a href="homepage.html" class="logo">CarTrader</a>
+    <div class="nav-links">
+      <a href="homepage.html">Home</a>
+      <a href="seller-portal.html">Seller Portal</a>
+      <a href="searchpage.html">Search</a>
+    </div>
+  </nav>
+
+  <main>
+    <div class="box">
+      <div class="icon">🔐</div>
+      <h1>Welcome Back</h1>
+      <p class="sub">Login to manage your car listings</p>
+      <form id="loginForm">
+        <div class="form-group">
+          <label>Username</label>
+          <input type="text" id="username" placeholder="Enter your username">
+          <div class="err-msg" id="e-username"></div>
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="password" placeholder="Enter your password">
+          <div class="err-msg" id="e-password"></div>
+        </div>
+        <button type="submit" class="btn">Login</button>
+      </form>
+      <div class="tip">Don't have an account? <a href="register.html">Register here</a></div>
+    </div>
+  </main>
+
+  <script>
+    function isUserRegistered(username, password) {
+      const users = JSON.parse(localStorage.getItem("users") || "[]");
+      return users.some(user => user.username === username && user.password === password);
+    }
+
+    document.getElementById("loginForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value.trim();
+      let valid = true;
+      
+      if (!username || username.length < 6) {
+        document.getElementById("e-username").textContent = "Username required (min 6 chars)";
+        document.getElementById("e-username").classList.add("show");
+        valid = false;
+      } else {
+        document.getElementById("e-username").classList.remove("show");
+      }
+      
+      if (!password || password.length < 6) {
+        document.getElementById("e-password").textContent = "Password required (min 6 chars)";
+        document.getElementById("e-password").classList.add("show");
+        valid = false;
+      } else {
+        document.getElementById("e-password").classList.remove("show");
+      }
+      
+      if (valid) {
+        if (isUserRegistered(username, password)) {
+          localStorage.setItem("loggedInUser", username);
+          alert("Login successful! Redirecting to Seller Portal...");
+          window.location.href = "seller-portal.html";
+        } else {
+          alert("Invalid username or password. Please register first.");
+        }
+      }
+    });
+  </script>
+</body>
+</html>
