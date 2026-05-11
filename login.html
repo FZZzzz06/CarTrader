@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Seller Login - CarTrader</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .top-nav {
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(10px);
+      padding: 16px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .top-nav .logo {
+      font-size: 24px;
+      font-weight: 700;
+      text-decoration: none;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .top-nav .nav-links {
+      display: flex;
+      gap: 32px;
+    }
+    .top-nav .nav-links a {
+      color: #555;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    .top-nav .nav-links a:hover {
+      color: #667eea;
+    }
+    main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+    .box {
+      background: white;
+      border-radius: 24px;
+      padding: 48px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    }
+    .box h1 {
+      font-size: 28px;
+      margin-bottom: 8px;
+      color: #1a1a2e;
+    }
+    .box .sub {
+      font-size: 14px;
+      color: #888;
+      margin-bottom: 32px;
+    }
+    .form-group {
+      margin-bottom: 24px;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    input {
+      width: 100%;
+      padding: 14px 16px;
+      border: 2px solid #e8e8e8;
+      border-radius: 12px;
+      font-size: 15px;
+    }
+    input:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+    input.error {
+      border-color: #e74c3c;
+    }
+    .err-msg {
+      font-size: 12px;
+      color: #e74c3c;
+      margin-top: 6px;
+      display: none;
+    }
+    .err-msg.show {
+      display: block;
+    }
+    .btn {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .tip {
+      text-align: center;
+      font-size: 14px;
+      margin-top: 24px;
+      color: #888;
+    }
+    .tip a {
+      color: #667eea;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <a href="homepage.html" class="logo">CarTrader</a>
+    <div class="nav-links">
+      <a href="homepage.html">Home</a>
+      <a href="seller-portal.html">Seller Portal</a>
+      <a href="searchpage.html">Search</a>
+    </div>
+  </nav>
+
+  <main>
+    <div class="box">
+      <h1>Welcome Back</h1>
+      <p class="sub">Login to manage your car listings</p>
+      <form id="loginForm">
+        <div class="form-group">
+          <label>Username</label>
+          <input type="text" id="username" placeholder="Enter your username">
+          <div class="err-msg" id="e-username"></div>
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="password" placeholder="Enter your password">
+          <div class="err-msg" id="e-password"></div>
+        </div>
+        <button type="submit" class="btn">Login</button>
+      </form>
+      <div class="tip">Don't have an account? <a href="register.html">Register here</a></div>
+    </div>
+  </main>
+
+  <script>
+    function isUserRegistered(username, password) {
+      const users = JSON.parse(localStorage.getItem("users") || "[]");
+      return users.some(user => user.username === username && user.password === password);
+    }
+
+    document.getElementById("loginForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value.trim();
+      let valid = true;
+      
+      if (!username || username.length < 6) {
+        document.getElementById("e-username").textContent = "Username required (min 6 chars)";
+        document.getElementById("e-username").classList.add("show");
+        valid = false;
+      } else {
+        document.getElementById("e-username").classList.remove("show");
+      }
+      
+      if (!password || password.length < 6) {
+        document.getElementById("e-password").textContent = "Password required (min 6 chars)";
+        document.getElementById("e-password").classList.add("show");
+        valid = false;
+      } else {
+        document.getElementById("e-password").classList.remove("show");
+      }
+      
+      if (valid) {
+        if (isUserRegistered(username, password)) {
+          localStorage.setItem("loggedInUser", username);
+          alert("Login successful! Redirecting to Seller Portal...");
+          window.location.href = "seller-portal.html";
+        } else {
+          alert("Invalid username or password. Please register first.");
+        }
+      }
+    });
+  </script>
+</body>
+</html>
